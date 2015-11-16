@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>TF-IDF Digital Library</title>
+
+  <!-- vis.js ネットワーク図描画のためのライブラリ -->
+  <script src="vis.js"></script>
+
+  <!-- vis.css ネットワーク図描画のためのスタイルシート -->
+  <link href="vis.css" rel="stylesheet" type="text/css">
+
+  <!-- jQuery -->
+  <script src="jquery-2.1.4.js"></script>
+
+  <style type="text/css">
+    #canvas{
+      width: 100%;
+      height: 800px;
+      border: 2px solid black;
+    }
+  </style>
+
+  <script>
+    $(function(){
+      <!-- 書籍 -->
+      var books = new vis.DataSet([
+        {id: 1, shape: "box", label: "ああ華族様だよ、と私は嘘を吐くのであった", title: "<p><b>キーワード</b>:アレキサンダー　女　ホテル</P>"},
+        {id: 2, shape: "box", label: "赤いくつ", title: "<p><b>キーワード</b>: くつ　赤　お寺</P>"},
+        {id: 3, shape: "box", label: "赤い蝋燭と人魚", title: "<p><b>キーワード</b>: 蝋燭　お婆さん　娘</P>"},
+        {id: 4, shape: "box", label: "明石鯛に勝る朝鮮の鯛", title: "<p><b>キーワード</b>: たい　だい　地方</P>"},
+        {id: 5, shape: "box", label: "赤ずきんちゃん", title: "<p><b>キーワード</b>: おばあさん　おかみ　子</P>"},
+        {id: 6, shape: "box", label: "青猫", title: "<p><b>キーワード</b>:詩　我　リズム</P>"},
+        {id: 7, shape: "box", label: "「青猫」について", title: "<p><b>キーワード</b>: 青　猫　もつ</P>"},
+        {id: 8, shape: "box", label: "映画の普及力とは", title: "<p><b>キーワード</b>: 映画　家庭　トーキー</P>"},
+        {id: 9, shape: "box", label: "映画の恋愛", title: "<p><b>キーワード</b>: 映画　場面　女優ー</P>"},
+        {id: 10, shape: "box", label: "英国メーデーの記", title: "<p><b>キーワード</b>: メーデー　伝統　学生</P>"},
+     	{id: 11, shape: "box", label: "英雄の器", title: "<p><b>キーワード</b>: 英雄　呂　器</P>"},
+        {id: 12, shape: "box", label: "茶粥の記", title: "<p><b>キーワード</b>: 姑　良人　粥</P>"},
+        {id: 13, shape: "box", label: "骸骨館", title: "<p><b>キーワード</b>: 骸骨　工場　少年</P>"},
+        {id: 14, shape: "box", label: "芸術家の告白祈祷", title: "<p><b>キーワード</b>: 言　つて　海</P>"},
+        {id: 15, shape: "box", label: "幻想", title: "<p><b>キーワード</b>: とい　鉄　声</P>"},
+        {id: 16, shape: "box", label: "議会の印象", title: "<p><b>キーワード</b>: 席　人　議会</P>"},
+        {id: 17, shape: "box", label: "戯曲以前のもの", title: "<p><b>キーワード</b>: 戯曲　興味　作品</P>"},
+        {id: 18, shape: "box", label: "祇園の枝垂桜", title: "<p><b>キーワード</b>: 桜　枝垂桜　美</P>"},
+        {id: 19, shape: "box", label: "偶感一語", title: "<p><b>キーワード</b>: 愛　自分　良人</P>"},
+        {id: 20, shape: "box", label: "碧玉の環飾", title: "<p><b>キーワード</b>: 孫　袁氏　猿</P>"},
+		{id: 21, shape: "box", label: "比叡", title: "<p><b>キーワード</b>: 姉　父　伝</P>"},
+        {id: 22, shape: "box", label: "イエスとペテロ", title: "<p><b>キーワード</b>: ペテロ　イエス　山賊</P>"},
+        {id: 23, shape: "box", label: "如何に読書すべきか", title: "<p><b>キーワード</b>: 本　ひと　古典</P>"},
+        {id: 24, shape: "box", label: "生き烏賊白味噌漬け", title: "<p><b>キーワード</b>: 白味噌　味噌　いか</P>"},
+        {id: 25, shape: "box", label: "異郷", title: "<p><b>キーワード</b>: 連れ　主婦　心持</P>"},
+        {id: 26, shape: "box", label: "蚊", title: "<p><b>キーワード</b>:玄　坊　つて</P>"},
+        {id: 27, shape: "box", label: "絵画の不安", title: "<p><b>キーワード</b>: 画布　概念　問い</P>"},
+        {id: 28, shape: "box", label: "貝殻", title: "<p><b>キーワード</b>: 猫　つて　言</P>"},
+        {id: 29, shape: "box", label: "顔の美について", title: "<p><b>キーワード</b>: 顔　まぶた　美人</P>"},
+        {id: 30, shape: "box", label: "軽蔑された翻訳", title: "<p><b>キーワード</b>: 翻訳　学者　思想</P>"},
+        {id: 31, shape: "box", label: "鶏鳴と神楽と", title: "<p><b>キーワード</b>: 鶏　神　言</P>"},
+        {id: 32, shape: "box", label: "経世の学、また講究すべし", title: "<p><b>キーワード</b>: なり　学　経済</P>"},
+        {id: 33, shape: "box", label: "帰京記", title: "<p><b>キーワード</b>: 自動車　婦人　汽車年</P>"},
+        {id: 34, shape: "box", label: "恋文", title: "<p><b>キーワード</b>: つて　恋文　女　</P>"},
+        {id: 35, shape: "box", label: "行為の価値", title: "<p><b>キーワード</b>: 墓　哲学　文学</P>"},
+        {id: 36, shape: "box", label: "香気の尊さ", title: "<p><b>キーワード</b>: 鮎　香気　味</P>"},
+        {id: 37, shape: "box", label: "講後", title: "<p><b>キーワード</b>: 峯　葉　雲</P>"},
+        {id: 38, shape: "box", label: "九月四日", title: "<p><b>キーワード</b>: 震災　草　人々</P>"},
+        {id: 39, shape: "box", label: "久地の梅林", title: "<p><b>キーワード</b>: 梅　梅林　也</P>"},
+        {id: 40, shape: "box", label: "饗宴", title: "<p><b>キーワード</b>: F　エ　稲</P>"},
+        {id: 41, shape: "box", label: "檸檬", title: "<p><b>キーワード</b>: 街　果物　店</P>"},
+        {id: 42, shape: "box", label: "鮪の茶漬け", title: "<p><b>キーワード</b>: 茶漬け　まぐろ　茶</P>"},
+        {id: 43, shape: "box", label: "耳無芳一", title: "<p><b>キーワード</b>: 住職　琵琶　声</P>"},
+        {id: 44, shape: "box", label: "水と骨", title: "<p><b>キーワード</b>: 水温　川　鮎</P>"},
+        {id: 45, shape: "box", label: "無月物語", title: "<p><b>キーワード</b>: 朝霧　公子　保</P>"},
+        {id: 46, shape: "box", label: "〔ながれたり〕", title: "<p><b>キーワード</b>: 水　川　さま</P>"},
+        {id: 47, shape: "box", label: "二十世紀の頂における図書館の意味", title: "<p><b>キーワード</b>: 歴史　年　人類</P>"},
+        {id: 48, shape: "box", label: "“能筆ジム”", title: "<p><b>キーワード</b>: ニセ　ニンゲル　ジム</P>"},
+        {id: 49, shape: "box", label: "残されたる江戸", title: "<p><b>キーワード</b>: ッ　趣味　吾</P>"},
+        {id: 50, shape: "box", label: "能面と松園さんの絵", title: "<p><b>キーワード</b>: 素質　絵　能</P>"},
+        {id: 51, shape: "box", label: "おいてけ堀", title: "<p><b>キーワード</b>: 住　魚籃　池</P>"},
+        {id: 52, shape: "box", label: "『桜樹』の序", title: "<p><b>キーワード</b>: 作家　小説　桜</P>"},
+        {id: 53, shape: "box", label: "ピアノ", title: "<p><b>キーワード</b>: ピアノ　藜　つて</P>"},
+        {id: 54, shape: "box", label: "ラプンツェル", title: "<p><b>キーワード</b>: 魔女　王子　中</P>"},
+        {id: 55, shape: "box", label: "歴史とは何か", title: "<p><b>キーワード</b>: 歴史　はたらき　つて</P>"},
+        {id: 56, shape: "box", label: "蓮花公主", title: "<p><b>キーワード</b>: 竇　公主　王</P>"},
+        {id: 57, shape: "box", label: "ルポルタージュの読後感", title: "<p><b>キーワード</b>: 女性　感想　ルポルタージュ</P>"},
+        {id: 58, shape: "box", label: "臨終まで", title: "<p><b>キーワード</b>: 病人　医師　弟</P>"},
+        {id: 59, shape: "box", label: "リラの手紙", title: "<p><b>キーワード</b>: 自分　手紙　部屋</P>"},
+        {id: 60, shape: "box", label: "リズムの構造", title: "<p><b>キーワード</b>:リズム　構造　考え</P>"},
+        {id: 61, shape: "box", label: "ろくろ首", title: "<p><b>キーワード</b>: 囘龍　首　処</P>"},
+        {id: 62, shape: "box", label: "ローマ法王と外交", title: "<p><b>キーワード</b>: 法王　皇帝　外交</P>"},
+        {id: 63, shape: "box", label: "老年と人生", title: "<p><b>キーワード</b>: 青年　青春　人生</P>"},
+        {id: 64, shape: "box", label: "ロザリオの鎖", title: "<p><b>キーワード</b>: 人　神　妻</P>"},
+        {id: 65, shape: "box", label: "流刑地で", title: "<p><b>キーワード</b>: 将校　兵士　エッゲ</P>"},
+        {id: 66, shape: "box", label: "猟色の果", title: "<p><b>キーワード</b>: 雪　半面　女</P>"},
+        {id: 67, shape: "box", label: "良夜", title: "<p><b>キーワード</b>: 予　伯父　巡査</P>"},
+        {id: 68, shape: "box", label: "柳営秘録かつえ蔵", title: "<p><b>キーワード</b>: 杉　小僧　鬼</P>"},
+        {id: 69, shape: "box", label: "西鶴と科学", title: "<p><b>キーワード</b>: 科学　永代　蔵</P>"},
+        {id: 70, shape: "box", label: "桜", title: "<p><b>キーワード</b>: 桜花　さくら　桜</P>"},
+        {id: 71, shape: "box", label: "桜の樹の下には", title: "<p><b>キーワード</b>: 屍体　桜　樹</P>"},
+        {id: 72, shape: "box", label: "山茶花", title: "<p><b>キーワード</b>: 爺　山茶花　機械</P>"},
+        {id: 73, shape: "box", label: "正義の花の環", title: "<p><b>キーワード</b>: メーデー　階級　税</P>"},
+        {id: 74, shape: "box", label: "創作", title: "<p><b>キーワード</b>: 生命　自己　心理</P>"},
+        {id: 75, shape: "box", label: "津輕地方とチエホフ", title: "<p><b>キーワード</b>: つて　言　戯曲</P>"},
+        {id: 76, shape: "box", label: "都喜姫", title: "<p><b>キーワード</b>: 姫　雲　駒</P>"},
+        {id: 77, shape: "box", label: "月見草", title: "<p><b>キーワード</b>: 草　馬車　目</P>"},
+        {id: 78, shape: "box", label: "姥捨", title: "<p><b>キーワード</b>: 枝　ひと　ふたり</P>"},
+        {id: 79, shape: "box", label: "うぐいす", title: "<p><b>キーワード</b>: うぐいす　写真　梅</P>"},
+        {id: 80, shape: "box", label: "鵜飼", title: "<p><b>キーワード</b>: 綱　鵜　鵜飼</P>"},
+        {id: 81, shape: "box", label: "欝金草売", title: "<p><b>キーワード</b>: 欝　草　珍</P>"},
+        {id: 82, shape: "box", label: "兎と猫", title: "<p><b>キーワード</b>: 兎　猫　洞</P>"},
+        {id: 83, shape: "box", label: "嘘の効用", title: "<p><b>キーワード</b>: 法　嘘　法律</P>"},
+        {id: 84, shape: "box", label: "歌の円寂", title: "<p><b>キーワード</b>: 短歌　歌　其</P>"},
+        {id: 85, shape: "box", label: "うた時計", title: "<p><b>キーワード</b>: おじさん　少年　坊</P>"},
+        {id: 86, shape: "box", label: "歌う白骨", title: "<p><b>キーワード</b>: 船　パイプ　ソーンダイク</P>"},
+        {id: 87, shape: "box", label: "美しい日本の", title: "<p><b>キーワード</b>: 鶉　写経　蜂</P>"},
+        {id: 88, shape: "box", label: "美しき敵", title: "<p><b>キーワード</b>: つて　敵　マギステル</P>"},
+        {id: 89, shape: "box", label: "飢ゑ", title: "<p><b>キーワード</b>: つて　細君　家</P>"},
+        {id: 90, shape: "box", label: "我が人生観", title: "<p><b>キーワード</b>: 女房　ダタイ　ニンシン</P>"},
+        {id: 91, shape: "box", label: "我邦感傷主義寸感", title: "<p><b>キーワード</b>: 軽重　校長　つて</P>"},
+        {id: 92, shape: "box", label: "和歌三", title: "<p><b>キーワード</b>: 春　ハ　ろ</P>"},
+        {id: 93, shape: "box", label: "若返り薬", title: "<p><b>キーワード</b>: 丸薬　乞食　祖父</P>"},
+        {id: 94, shape: "box", label: "若狭鯖のなれずし", title: "<p><b>キーワード</b>: さば　春　市場</P>"},
+        {id: 95, shape: "box", label: "山想う心", title: "<p><b>キーワード</b>: 山　美　心</P>"},
+        {id: 96, shape: "box", label: "謡曲と画題", title: "<p><b>キーワード</b>: 小町　候　歌</P>"},
+        {id: 97, shape: "box", label: "夕顔の門", title: "<p><b>キーワード</b>: 市　鷹　ば</P>"},
+        {id: 98, shape: "box", label: "遺言文学", title: "<p><b>キーワード</b>: 文学　つて　プロレタリア</P>"},
+        {id: 99, shape: "box", label: "雪女", title: "<p><b>キーワード</b>: 雪　子供　女</P>"},
+        {id: 100, shape: "box", label: "夕凪と夕風", title: "<p><b>キーワード</b>: 夕凪　因子　海陸</P>"}
+      ]);
+
+      <!-- 書籍間の関係 -->
+      var links = new vis.DataSet([
+      ]);
+
+      <!-- 描画のためのキャンバス -->
+      var canvas = $("#canvas");
+      var container = canvas[0];
+
+      <!-- データ -->
+      var data = {
+        nodes: books,
+        edges: links
+      };
+
+      <!-- オプション -->
+      var options = {
+        interaction:{hover:true} //ホバーで色を変更
+      };
+
+      <!-- ネットワーク -->
+      var network = new vis.Network(container, data, options);
+
+      <!-- ホバーイベント -->
+      network.on("hoverNode", function(params){
+        //$("#log").append("<p>Hover Event</p>")
+      });
+    })
+  </script>
+
+</head>
+
+<body>
+  <h1>TF-IDF Digital Library</h1>
+
+  <div id="canvas">
+  </div>
+
+  <div id="log">
+  </div>
+
+</body>
