@@ -14,10 +14,15 @@
   <script src="jquery-2.1.4.js"></script>
 
   <style type="text/css">
+
+    body{
+        background-image: url("images/background.jpg");
+    }
+
     #canvas{
       width: 100%;
       height: 800px;
-      border: 2px solid black;
+      /*border: 2px solid black;*/
     }
   </style>
 
@@ -25,6 +30,7 @@
     $(function(){
       <!-- 書籍 -->
       var books = new vis.DataSet([
+        // {id: 1, shape: "box", label: "ああ華族様だよ、と私は嘘を吐くのであった", title: "<p><b>キーワード</b>:アレキサンダー　女　ホテル</P>", image:"images/book.jpg", shape: "image"},
         {id: 1, shape: "box", label: "ああ華族様だよ、と私は嘘を吐くのであった", title: "<p><b>キーワード</b>:アレキサンダー　女　ホテル</P>"},
         {id: 2, shape: "box", label: "赤いくつ", title: "<p><b>キーワード</b>: くつ　赤　お寺</P>"},
         {id: 3, shape: "box", label: "赤い蝋燭と人魚", title: "<p><b>キーワード</b>: 蝋燭　お婆さん　娘</P>"},
@@ -129,6 +135,8 @@
 
       <!-- 書籍間の関係 -->
       var links = new vis.DataSet([
+        //   {from:1, to:52},
+        //   {from:2, to:3}
       ]);
 
       <!-- 描画のためのキャンバス -->
